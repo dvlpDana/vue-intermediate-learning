@@ -16,8 +16,14 @@ export default {
   },
   methods: {
     addTodo() {
-      localStorage.setItem(this.newTodoItem, JSON.stringify(this.newTodoItem));
+      if(this.newTodoItem !== '') {
+        let obj = {
+        completed : false,
+        item: this.newTodoItem,
+      };
+      localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
       this.clearInput();
+      }
     },
     clearInput() {
       this.newTodoItem ='';
@@ -39,19 +45,17 @@ input:focus {
   line-height: 5px;
   border-radius: 5px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 .inputBox input {
-  width:inherit;
+  width: calc(100% - 3rem);
   height: 40px;
   border-style: none;
   font-size: 0.9rem;
+  padding-left: 1rem;
 }
 .addContainer {
-  position: absolute;
-  right: 0;
-  top: 0;
   background: linear-gradient(to right, #6478fb, #8763fb);
   display: flex;
   justify-content: center;
