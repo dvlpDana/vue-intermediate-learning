@@ -2,11 +2,13 @@
   <div>
     <TransitionGroup name="list" tag="ul">
       <li
-        v-for="(todoItem, index) in this.$store.state.todoItems"
+        v-for="(todoItem, index) in this.storedTodoItems"
         :key="todoItem.item"
         class="shadow"
       >
-        <span class="checkBtnOutline" @click="toggleComplete(todoItem, index)"
+        <span
+          class="checkBtnOutline"
+          @click="toggleComplete({ todoItem, index })"
           ><i
             :class="[
               { checkBtnCompleted: todoItem.completed },
@@ -17,7 +19,7 @@
         <span :class="{ textCompleted: todoItem.completed }">{{
           todoItem.item ? todoItem.item : "등록된 내용이 없습니다."
         }}</span>
-        <button @click="removeTodo(todoItem, index)" class="removeBtn">
+        <button @click="removeTodo({ todoItem, index })" class="removeBtn">
           <i class="fa-solid fa-trash-can"></i>
         </button>
       </li>
@@ -26,16 +28,29 @@
 </template>
 
 <script>
+  import { mapGetters, mapMutations } from "vuex";
+
   export default {
     methods: {
-      removeTodo(todoItem, index) {
-        // this.$emit("removeItem", todoItem, index);
-        this.$store.commit('removeOneItem', { todoItem, index });
-      },
-      toggleComplete(todoItem, index) {
-        // this.$emit("toggleItem", todoItem, index);
-        this.$store.commit('toggleOneItem', { todoItem, index });
-      }
+      ...mapMutations({
+        removeTodo: "removeOneItem",
+        toggleComplete: "toggleOneItem"
+      }),
+      // removeTodo(todoItem, index) {
+      // this.$emit("removeItem", todoItem, index);
+      //   this.$store.commit('removeOneItem', { todoItem, index });
+      // },
+      // toggleComplete(todoItem, index) {
+      // this.$emit("toggleItem", todoItem, index);
+      //   this.$store.commit('toggleOneItem', { todoItem, index });
+      // }
+    },
+    computed: {
+      // todoItems() {
+      //   return this.$store.getters.storedTodoItems
+      // }
+      // ...mapGetters({ todoItems: 'storedTodoItems'})
+      ...mapGetters(["storedTodoItems"])
     }
   };
 </script>
